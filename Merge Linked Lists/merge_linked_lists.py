@@ -1,84 +1,46 @@
 # Sajo, Jhon Kaiser R.
 # BSCPE 2-4
 
-class Node:
-	def __init__(self, data):
-		self.data = data
-		self.next = None
+class ListNode:
+    def __init__(self, value=0, next=None):
+        self.value = value
+        self.next = next
 
-# Create & Handle List operations
-class LinkedList:
-	def __init__(self):
-		self.head = None
+def merge_sorted_lists(list1, list2):
+    # dummy node to serve as head of merge list
+    dummy = ListNode()
+    current = dummy
+	
+	# Check both lists and compare the values
+    while list1 is not None and list2 is not None:
+        if list1.value <= list2.value:
+            current.next = list1
+            list1 = list1.next
+        else:
+            current.next = list2
+            list2 = list2.next
 
-    # This would print the list
-	def printList(self):
-		temp = self.head
-		while temp:
-			print(temp.data, end=" ")
-			temp = temp.next
+  		# move to the current node
+        current = current.next
 
-	# To add elements into the lists
-	def addToList(self, newData):
-		newNode = Node(newData)
-		if self.head is None:
-			self.head = newNode
-			return
+	# If any of the list gets completely empty
+    # directly join all the elements of the other list
+    if list1 is None:
+        current.next = list2
+    elif list2 is None:
+        current.next = list1
 
-		last = self.head
-		while last.next:
-			last = last.next
+    return dummy.next
 
-		last.next = newNode
+# Example usage
+# Create two sorted linked lists
+list1 = ListNode(1, ListNode(2, ListNode(4)))
+list2 = ListNode(1, ListNode(3, ListNode(4)))
 
-# Method to merge two linked lists
-def mergeLists(list1, list2):
+# Merge the two lists
+merged_list = merge_sorted_lists(list1, list2)
 
-	# Create a dummy node to serve as the head of the merged list
-	dummyNode = Node(0)
-
-	# Tail stores the last node
-	tail = dummyNode
-	while True:
-
-		# if list one list is now empty, join all the other elements
-		if list1 is None:
-			tail.next = list2
-			break
-		if list2 is None:
-			tail.next = list1
-			break
-
-		# Compare values of each data to see which is smaller then appends it
-		if list1.data <= list2.data:
-			tail.next = list1
-			list1 = list1.next
-		else:
-			tail.next = list2
-			list2 = list2.next
-
-		# Advance the tail
-		tail = tail.next
-
-	# Returns the head of the merged list
-	return dummyNode.next
-
-# Sample usage
-linkedList1 = LinkedList()
-linkedList2 = LinkedList()
-
-# Add elements to the list in sorted order
-linkedList1.addToList(1)
-linkedList1.addToList(15)
-linkedList1.addToList(15)
-
-linkedList2.addToList(2)
-linkedList2.addToList(3)
-linkedList2.addToList(12)
-
-# Merge together
-linkedList1.head = mergeLists(linkedList1.head, linkedList2.head)
-
-# Print the new list
-print("New linked list:")
-linkedList1.printList()
+# Print the merged list
+while merged_list is not None:
+    print(merged_list.value, end=" -> ")
+    merged_list = merged_list.next
